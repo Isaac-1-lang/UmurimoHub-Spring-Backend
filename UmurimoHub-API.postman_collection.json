@@ -1,0 +1,483 @@
+{
+  "info": {
+    "name": "UmurimoHub Workforce Management API",
+    "description": "Complete API collection for UmurimoHub workforce management system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "hr",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "hr123",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"hr\",\n  \"password\": \"hr123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "item": [
+        {
+          "name": "Get All Workers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workers"]
+            }
+          }
+        },
+        {
+          "name": "Get Worker By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workers/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workers", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Worker",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"worker3\",\n  \"password\": \"worker123\",\n  \"fullName\": \"Charlie Worker\",\n  \"email\": \"charlie@umurimohub.ac\",\n  \"phoneNumber\": \"+250788000005\",\n  \"employeeId\": \"EMP003\",\n  \"department\": \"Finance\",\n  \"position\": \"Accountant\",\n  \"hireDate\": \"2024-01-15\",\n  \"baseSalary\": 450000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workers"]
+            }
+          }
+        },
+        {
+          "name": "Get My Profile (Worker)",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "worker1"
+                },
+                {
+                  "key": "password",
+                  "value": "worker123"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workers/my-profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workers", "my-profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Get All Attendance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "attendance"]
+            }
+          }
+        },
+        {
+          "name": "Get Worker Attendance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance/worker/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "attendance", "worker", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance By Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance/date-range?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "attendance", "date-range"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workerId\": 1,\n  \"date\": \"2024-05-14\",\n  \"checkIn\": \"08:00:00\",\n  \"checkOut\": \"17:00:00\",\n  \"status\": \"PRESENT\",\n  \"notes\": \"On time\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "attendance"]
+            }
+          }
+        },
+        {
+          "name": "Get My Attendance (Worker)",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "worker1"
+                },
+                {
+                  "key": "password",
+                  "value": "worker123"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance/my-attendance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "attendance", "my-attendance"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Salary Deductions",
+      "item": [
+        {
+          "name": "Get All Deductions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/salary-deductions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "salary-deductions"]
+            }
+          }
+        },
+        {
+          "name": "Get Worker Deductions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/salary-deductions/worker/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "salary-deductions", "worker", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Deduction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workerId\": 1,\n  \"deductionDate\": \"2024-05-14\",\n  \"amount\": 50000,\n  \"type\": \"LATE_ARRIVAL\",\n  \"reason\": \"Late arrival on 3 occasions this month\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/salary-deductions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "salary-deductions"]
+            }
+          }
+        },
+        {
+          "name": "Get My Deductions (Worker)",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "worker1"
+                },
+                {
+                  "key": "password",
+                  "value": "worker123"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/salary-deductions/my-deductions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "salary-deductions", "my-deductions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Disciplinary Actions",
+      "item": [
+        {
+          "name": "Get All Actions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/disciplinary-actions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "disciplinary-actions"]
+            }
+          }
+        },
+        {
+          "name": "Get Worker Actions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/disciplinary-actions/worker/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "disciplinary-actions", "worker", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Disciplinary Action",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workerId\": 1,\n  \"type\": \"WRITTEN_WARNING\",\n  \"description\": \"Repeated tardiness despite verbal warnings\",\n  \"severity\": \"MEDIUM\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/disciplinary-actions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "disciplinary-actions"]
+            }
+          }
+        },
+        {
+          "name": "Get My Actions (Worker)",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "worker1"
+                },
+                {
+                  "key": "password",
+                  "value": "worker123"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/disciplinary-actions/my-actions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "disciplinary-actions", "my-actions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get CEO Stats",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "ceo"
+                },
+                {
+                  "key": "password",
+                  "value": "ceo123"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/ceo-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "ceo-stats"]
+            }
+          }
+        },
+        {
+          "name": "Get HR Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/hr-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "hr-stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"password123\",\n  \"fullName\": \"New User\",\n  \"email\": \"newuser@umurimohub.ac\",\n  \"phoneNumber\": \"+250788000010\",\n  \"role\": \"WORKER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    }
+  ]
+}

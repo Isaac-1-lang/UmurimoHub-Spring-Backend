@@ -1,0 +1,73 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CEO Dashboard - UmurimoHub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .navbar { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 24px; }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .stat-card h3 { color: #666; font-size: 14px; margin-bottom: 10px; }
+        .stat-card .number { font-size: 36px; font-weight: bold; color: #667eea; }
+        .menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .menu-item { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; text-decoration: none; color: #333; transition: transform 0.2s; }
+        .menu-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .menu-item h3 { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🏢 UmurimoHub - CEO Dashboard</h1>
+        <div>
+            <span>Welcome, ${user.fullName}</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <h3>TOTAL WORKERS</h3>
+                <div class="number">${totalWorkers}</div>
+            </div>
+            <div class="stat-card">
+                <h3>ATTENDANCE RECORDS</h3>
+                <div class="number">${totalAttendance}</div>
+            </div>
+            <div class="stat-card">
+                <h3>DISCIPLINARY ACTIONS</h3>
+                <div class="number">${totalDisciplinary}</div>
+            </div>
+            <div class="stat-card">
+                <h3>SALARY DEDUCTIONS</h3>
+                <div class="number">${totalDeductions}</div>
+            </div>
+        </div>
+        
+        <div class="menu">
+            <a href="/ceo/workers" class="menu-item">
+                <div style="font-size: 48px;">👥</div>
+                <h3>View Workers</h3>
+            </a>
+            <a href="/ceo/attendance" class="menu-item">
+                <div style="font-size: 48px;">📅</div>
+                <h3>Attendance Overview</h3>
+            </a>
+            <a href="/ceo/reports" class="menu-item">
+                <div style="font-size: 48px;">📊</div>
+                <h3>Reports</h3>
+            </a>
+            <a href="/actuator/health" class="menu-item">
+                <div style="font-size: 48px;">💚</div>
+                <h3>System Health</h3>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
