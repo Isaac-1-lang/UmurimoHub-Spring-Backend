@@ -39,7 +39,12 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.setAllowedOrigins(java.util.List.of("http://localhost:8080", "http://localhost:3000"));
+                corsConfig.setAllowedOrigins(java.util.List.of(
+                        "http://localhost:8080",
+                        "http://localhost:3000",
+                        "http://localhost:5173",
+                        "http://localhost:8082"
+                ));
                 corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 corsConfig.setAllowedHeaders(java.util.List.of("*"));
                 corsConfig.setAllowCredentials(true);
@@ -59,7 +64,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/api-docs/**"
                 ).permitAll()
-                .requestMatchers("/api/workers/**", "/api/attendance/**", "/api/salary-deductions/**", "/api/disciplinary-actions/**")
+                .requestMatchers("/api/workers/**", "/api/attendance/**", "/api/salary-deductions/**", "/api/disciplinary-actions/**", "/api/reactive/**")
                     .authenticated()
                 .requestMatchers("/api/dashboard/ceo-stats").hasAuthority("CEO")
                 .requestMatchers("/api/dashboard/hr-stats").hasAuthority("HR")
