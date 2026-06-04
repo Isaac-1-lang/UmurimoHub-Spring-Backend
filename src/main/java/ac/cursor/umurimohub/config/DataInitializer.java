@@ -1,7 +1,11 @@
 package ac.cursor.umurimohub.config;
 
-import ac.cursor.umurimohub.model.*;
-import ac.cursor.umurimohub.repository.*;
+import ac.cursor.umurimohub.attendance.model.Attendance;
+import ac.cursor.umurimohub.attendance.repository.AttendanceRepository;
+import ac.cursor.umurimohub.auth.model.User;
+import ac.cursor.umurimohub.auth.repository.UserRepository;
+import ac.cursor.umurimohub.worker.model.Worker;
+import ac.cursor.umurimohub.worker.repository.WorkerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

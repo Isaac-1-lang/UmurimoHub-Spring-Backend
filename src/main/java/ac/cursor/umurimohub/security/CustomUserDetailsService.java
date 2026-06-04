@@ -1,7 +1,7 @@
 package ac.cursor.umurimohub.security;
 
-import ac.cursor.umurimohub.model.User;
-import ac.cursor.umurimohub.repository.UserRepository;
+import ac.cursor.umurimohub.auth.model.User;
+import ac.cursor.umurimohub.auth.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
