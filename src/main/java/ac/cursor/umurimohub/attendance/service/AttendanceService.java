@@ -1,7 +1,6 @@
 package ac.cursor.umurimohub.attendance.service;
 
 import ac.cursor.umurimohub.attendance.model.Attendance;
-import ac.cursor.umurimohub.worker.model.Worker;
 import ac.cursor.umurimohub.attendance.repository.AttendanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +17,13 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "attendanceTransactionManager")
     public Attendance recordAttendance(Attendance attendance) {
         return attendanceRepository.save(attendance);
     }
 
-    public List<Attendance> getWorkerAttendance(Worker worker) {
-        return attendanceRepository.findByWorkerOrderByDateDesc(worker);
+    public List<Attendance> getWorkerAttendance(Long workerId) {
+        return attendanceRepository.findByWorkerIdOrderByDateDesc(workerId);
     }
 
     public List<Attendance> getAttendanceByDateRange(LocalDate startDate, LocalDate endDate) {

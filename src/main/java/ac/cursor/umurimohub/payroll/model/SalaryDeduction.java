@@ -1,7 +1,5 @@
 package ac.cursor.umurimohub.payroll.model;
 
-import ac.cursor.umurimohub.auth.model.User;
-import ac.cursor.umurimohub.worker.model.Worker;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,9 +12,8 @@ public class SalaryDeduction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "worker_id", nullable = false)
-    private Worker worker;
+    @Column(name = "worker_id", nullable = false)
+    private Long workerId;
 
     @Column(nullable = false)
     private LocalDate deductionDate;
@@ -31,22 +28,10 @@ public class SalaryDeduction {
     @Column(nullable = false)
     private String reason;
 
-    @ManyToOne
-    @JoinColumn(name = "approved_by")
-    private User approvedBy;
+    @Column(name = "approved_by_user_id")
+    private Long approvedByUserId;
 
     public SalaryDeduction() {
-    }
-
-    public SalaryDeduction(Long id, Worker worker, LocalDate deductionDate, BigDecimal amount, 
-                           DeductionType type, String reason, User approvedBy) {
-        this.id = id;
-        this.worker = worker;
-        this.deductionDate = deductionDate;
-        this.amount = amount;
-        this.type = type;
-        this.reason = reason;
-        this.approvedBy = approvedBy;
     }
 
     public Long getId() {
@@ -57,12 +42,12 @@ public class SalaryDeduction {
         this.id = id;
     }
 
-    public Worker getWorker() {
-        return worker;
+    public Long getWorkerId() {
+        return workerId;
     }
 
-    public void setWorker(Worker worker) {
-        this.worker = worker;
+    public void setWorkerId(Long workerId) {
+        this.workerId = workerId;
     }
 
     public LocalDate getDeductionDate() {
@@ -97,12 +82,12 @@ public class SalaryDeduction {
         this.reason = reason;
     }
 
-    public User getApprovedBy() {
-        return approvedBy;
+    public Long getApprovedByUserId() {
+        return approvedByUserId;
     }
 
-    public void setApprovedBy(User approvedBy) {
-        this.approvedBy = approvedBy;
+    public void setApprovedByUserId(Long approvedByUserId) {
+        this.approvedByUserId = approvedByUserId;
     }
 
     public enum DeductionType {

@@ -20,7 +20,7 @@ public class OtpService {
         this.notificationPort = notificationPort;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "authTransactionManager")
     public void generateAndSendOtp(String email) {
         // Generate 6-digit OTP
         String otpCode = String.format("%06d", new Random().nextInt(999999));
@@ -36,7 +36,7 @@ public class OtpService {
         notificationPort.sendOtpEmail(email, otpCode);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "authTransactionManager")
     public boolean verifyOtp(String email, String otpCode) {
         Otp otp = otpRepository.findByEmailAndOtpCodeAndVerifiedFalse(email, otpCode)
                 .orElseThrow(() -> new RuntimeException("Invalid OTP code"));

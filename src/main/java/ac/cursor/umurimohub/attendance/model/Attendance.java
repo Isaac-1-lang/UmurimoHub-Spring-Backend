@@ -1,6 +1,5 @@
 package ac.cursor.umurimohub.attendance.model;
 
-import ac.cursor.umurimohub.worker.model.Worker;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,9 +12,8 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "worker_id", nullable = false)
-    private Worker worker;
+    @Column(name = "worker_id", nullable = false)
+    private Long workerId;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -34,17 +32,6 @@ public class Attendance {
     public Attendance() {
     }
 
-    public Attendance(Long id, Worker worker, LocalDate date, LocalTime checkIn, 
-                      LocalTime checkOut, AttendanceStatus status, String notes) {
-        this.id = id;
-        this.worker = worker;
-        this.date = date;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
-        this.status = status;
-        this.notes = notes;
-    }
-
     public Long getId() {
         return id;
     }
@@ -53,12 +40,12 @@ public class Attendance {
         this.id = id;
     }
 
-    public Worker getWorker() {
-        return worker;
+    public Long getWorkerId() {
+        return workerId;
     }
 
-    public void setWorker(Worker worker) {
-        this.worker = worker;
+    public void setWorkerId(Long workerId) {
+        this.workerId = workerId;
     }
 
     public LocalDate getDate() {

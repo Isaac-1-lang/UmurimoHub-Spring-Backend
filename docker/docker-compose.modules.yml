@@ -1,0 +1,20 @@
+# PostgreSQL with one database per bounded context (modular monolith demo).
+# Start: docker compose -f docker/docker-compose.modules.yml up -d
+# Run app:  mvn spring-boot:run -Dspring-boot.run.profiles=modular-db
+
+services:
+  postgres-modules:
+    image: postgres:16-alpine
+    container_name: umurimo-postgres-modules
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init-modules.sql:/docker-entrypoint-initdb.d/init-modules.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

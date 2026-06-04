@@ -3,11 +3,10 @@ package ac.cursor.umurimohub.dashboard.controller;
 import ac.cursor.umurimohub.shared.dto.ApiResponse;
 import ac.cursor.umurimohub.attendance.model.Attendance;
 import ac.cursor.umurimohub.discipline.model.DisciplinaryAction;
-import ac.cursor.umurimohub.worker.model.Worker;
 import ac.cursor.umurimohub.attendance.service.AttendanceService;
 import ac.cursor.umurimohub.discipline.service.DisciplinaryActionService;
 import ac.cursor.umurimohub.payroll.service.SalaryDeductionService;
-import ac.cursor.umurimohub.worker.service.WorkerService;
+import ac.cursor.umurimohub.worker.port.WorkerLookupPort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,15 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 public class DashboardRestController {
 
-    private final WorkerService workerService;
+    private final WorkerLookupPort workerLookupPort;
     private final AttendanceService attendanceService;
     private final DisciplinaryActionService disciplinaryActionService;
     private final SalaryDeductionService salaryDeductionService;
 
-    public DashboardRestController(WorkerService workerService, AttendanceService attendanceService,
+    public DashboardRestController(WorkerLookupPort workerLookupPort, AttendanceService attendanceService,
                                    DisciplinaryActionService disciplinaryActionService,
                                    SalaryDeductionService salaryDeductionService) {
-        this.workerService = workerService;
+        this.workerLookupPort = workerLookupPort;
         this.attendanceService = attendanceService;
         this.disciplinaryActionService = disciplinaryActionService;
         this.salaryDeductionService = salaryDeductionService;
@@ -41,9 +40,9 @@ public class DashboardRestController {
     @PreAuthorize("hasAuthority('CEO')")
     @Operation(summary = "Get CEO dashboard statistics", description = "Get operational summary for CEO")
     public ResponseEntity<ApiResponse<CEOStats>> getCEOStats() {
-        long totalWorkers = workerService.getAllWorkers().size();
-        long activeWorkers = workerService.getAllWorkers().stream()
-                .filter(w->w.getStatus() == Worker.EmploymentStatus.ACTIVE)
+        long totalWorkers = workerLookupPort.countWorkers();
+        long activeWorkers = workerLookupPort.findAll().stream()
+                .filter(w -> "ACTIVE".equals(w.status()))
                 .count();
         
         // Get today's attendance
@@ -84,9 +83,9 @@ public class DashboardRestController {
     @PreAuthorize("hasAuthority('HR')")
     @Operation(summary = "Get HR dashboard statistics", description = "Get workforce statistics for HR")
     public ResponseEntity<ApiResponse<HRStats>> getHRStats() {
-        long totalWorkers = workerService.getAllWorkers().size();
-        long activeWorkers = workerService.getAllWorkers().stream()
-                .filter(w -> w.getStatus() == Worker.EmploymentStatus.ACTIVE)
+        long totalWorkers = workerLookupPort.countWorkers();
+        long activeWorkers = workerLookupPort.findAll().stream()
+                .filter(w -> "ACTIVE".equals(w.status()))
                 .count();
         
         // Get today's attendance

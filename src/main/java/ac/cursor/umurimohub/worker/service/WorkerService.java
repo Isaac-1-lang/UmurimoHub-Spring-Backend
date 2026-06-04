@@ -16,7 +16,7 @@ public class WorkerService {
         this.workerRepository = workerRepository;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "workerTransactionManager")
     public Worker createWorker(Worker worker) {
         return workerRepository.save(worker);
     }
@@ -35,7 +35,7 @@ public class WorkerService {
                 .orElseThrow(() -> new RuntimeException("Worker not found for user"));
     }
 
-    @Transactional
+    @Transactional(transactionManager = "workerTransactionManager")
     public Worker updateWorker(Worker worker) {
         return workerRepository.save(worker);
     }

@@ -1,7 +1,6 @@
 package ac.cursor.umurimohub.payroll.service;
 
 import ac.cursor.umurimohub.payroll.model.SalaryDeduction;
-import ac.cursor.umurimohub.worker.model.Worker;
 import ac.cursor.umurimohub.payroll.repository.SalaryDeductionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +16,13 @@ public class SalaryDeductionService {
         this.deductionRepository = deductionRepository;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "payrollTransactionManager")
     public SalaryDeduction createDeduction(SalaryDeduction deduction) {
         return deductionRepository.save(deduction);
     }
 
-    public List<SalaryDeduction> getWorkerDeductions(Worker worker) {
-        return deductionRepository.findByWorkerOrderByDeductionDateDesc(worker);
+    public List<SalaryDeduction> getWorkerDeductions(Long workerId) {
+        return deductionRepository.findByWorkerIdOrderByDeductionDateDesc(workerId);
     }
 
     public List<SalaryDeduction> getAllDeductions() {

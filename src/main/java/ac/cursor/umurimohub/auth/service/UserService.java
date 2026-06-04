@@ -24,7 +24,7 @@ public class UserService {
         this.notificationPort = notificationPort;
     }
 
-    @Transactional
+    @Transactional(transactionManager = "authTransactionManager")
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -55,7 +55,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @Transactional
+    @Transactional(transactionManager = "authTransactionManager")
     public User updateUser(User user) {
         return userRepository.save(user);
     }
@@ -68,7 +68,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    @Transactional
+    @Transactional(transactionManager = "authTransactionManager")
     public User createUserWithEmailNotification(User user) {
         // Store the plain password before encoding for email notification
         String plainPassword = user.getPassword();

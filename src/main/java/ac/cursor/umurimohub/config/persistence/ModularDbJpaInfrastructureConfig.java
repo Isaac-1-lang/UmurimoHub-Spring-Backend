@@ -1,0 +1,28 @@
+package ac.cursor.umurimohub.config.persistence;
+
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+@Configuration
+@Profile("modular-db")
+@EnableConfigurationProperties({JpaProperties.class, ModuleDataSourceProperties.class})
+public class ModularDbJpaInfrastructureConfig {
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        return new HibernateJpaVendorAdapter();
+    }
+
+    @Bean
+    public EntityManagerFactoryBuilder entityManagerFactoryBuilder(
+            JpaVendorAdapter jpaVendorAdapter,
+            JpaProperties jpaProperties) {
+        return new EntityManagerFactoryBuilder(jpaVendorAdapter, jpaProperties.getProperties(), null);
+    }
+}

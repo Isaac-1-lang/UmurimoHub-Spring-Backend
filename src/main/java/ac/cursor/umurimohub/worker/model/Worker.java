@@ -1,6 +1,5 @@
 package ac.cursor.umurimohub.worker.model;
 
-import ac.cursor.umurimohub.auth.model.User;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,9 +12,8 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Long userId;
 
     @Column(unique = true, nullable = false)
     private String employeeId;
@@ -39,18 +37,6 @@ public class Worker {
     public Worker() {
     }
 
-    public Worker(Long id, User user, String employeeId, String department, String position, 
-                  LocalDate hireDate, BigDecimal baseSalary, EmploymentStatus status) {
-        this.id = id;
-        this.user = user;
-        this.employeeId = employeeId;
-        this.department = department;
-        this.position = position;
-        this.hireDate = hireDate;
-        this.baseSalary = baseSalary;
-        this.status = status;
-    }
-
     public Long getId() {
         return id;
     }
@@ -59,12 +45,12 @@ public class Worker {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmployeeId() {

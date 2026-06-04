@@ -1,7 +1,5 @@
 package ac.cursor.umurimohub.discipline.model;
 
-import ac.cursor.umurimohub.auth.model.User;
-import ac.cursor.umurimohub.worker.model.Worker;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,9 +11,8 @@ public class DisciplinaryAction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "worker_id", nullable = false)
-    private Worker worker;
+    @Column(name = "worker_id", nullable = false)
+    private Long workerId;
 
     @Column(nullable = false)
     private LocalDate actionDate;
@@ -31,22 +28,10 @@ public class DisciplinaryAction {
     @Column(nullable = false)
     private Severity severity;
 
-    @ManyToOne
-    @JoinColumn(name = "issued_by", nullable = false)
-    private User issuedBy;
+    @Column(name = "issued_by_user_id", nullable = false)
+    private Long issuedByUserId;
 
     public DisciplinaryAction() {
-    }
-
-    public DisciplinaryAction(Long id, Worker worker, LocalDate actionDate, ActionType type, 
-                              String description, Severity severity, User issuedBy) {
-        this.id = id;
-        this.worker = worker;
-        this.actionDate = actionDate;
-        this.type = type;
-        this.description = description;
-        this.severity = severity;
-        this.issuedBy = issuedBy;
     }
 
     public Long getId() {
@@ -57,12 +42,12 @@ public class DisciplinaryAction {
         this.id = id;
     }
 
-    public Worker getWorker() {
-        return worker;
+    public Long getWorkerId() {
+        return workerId;
     }
 
-    public void setWorker(Worker worker) {
-        this.worker = worker;
+    public void setWorkerId(Long workerId) {
+        this.workerId = workerId;
     }
 
     public LocalDate getActionDate() {
@@ -97,12 +82,12 @@ public class DisciplinaryAction {
         this.severity = severity;
     }
 
-    public User getIssuedBy() {
-        return issuedBy;
+    public Long getIssuedByUserId() {
+        return issuedByUserId;
     }
 
-    public void setIssuedBy(User issuedBy) {
-        this.issuedBy = issuedBy;
+    public void setIssuedByUserId(Long issuedByUserId) {
+        this.issuedByUserId = issuedByUserId;
     }
 
     public enum ActionType {
