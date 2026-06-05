@@ -6,12 +6,14 @@ import ac.cursor.umurimohub.worker.model.Worker;
 import ac.cursor.umurimohub.worker.port.WorkerLookupPort;
 import ac.cursor.umurimohub.worker.port.dto.WorkerRef;
 import ac.cursor.umurimohub.worker.repository.WorkerRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Profile("!distributed & !service-worker")
 public class WorkerLookupAdapter implements WorkerLookupPort {
 
     private final WorkerRepository workerRepository;

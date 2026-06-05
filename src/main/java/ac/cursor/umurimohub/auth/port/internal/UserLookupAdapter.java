@@ -4,11 +4,13 @@ import ac.cursor.umurimohub.auth.model.User;
 import ac.cursor.umurimohub.auth.port.UserLookupPort;
 import ac.cursor.umurimohub.auth.port.dto.UserRef;
 import ac.cursor.umurimohub.auth.repository.UserRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@Profile("!distributed")
 public class UserLookupAdapter implements UserLookupPort {
 
     private final UserRepository userRepository;
@@ -27,7 +29,7 @@ public class UserLookupAdapter implements UserLookupPort {
         return findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    static UserRef toRef(User user) {
+    public static UserRef toRef(User user) {
         return new UserRef(
                 user.getId(),
                 user.getUsername(),

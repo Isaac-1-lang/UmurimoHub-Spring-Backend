@@ -3,9 +3,9 @@ package ac.cursor.umurimohub.dashboard.controller;
 import ac.cursor.umurimohub.shared.dto.ApiResponse;
 import ac.cursor.umurimohub.attendance.model.Attendance;
 import ac.cursor.umurimohub.discipline.model.DisciplinaryAction;
-import ac.cursor.umurimohub.attendance.service.AttendanceService;
-import ac.cursor.umurimohub.discipline.service.DisciplinaryActionService;
-import ac.cursor.umurimohub.payroll.service.SalaryDeductionService;
+import ac.cursor.umurimohub.attendance.port.AttendanceQueryPort;
+import ac.cursor.umurimohub.discipline.port.DisciplineQueryPort;
+import ac.cursor.umurimohub.payroll.port.PayrollQueryPort;
 import ac.cursor.umurimohub.worker.port.WorkerLookupPort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,17 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardRestController {
 
     private final WorkerLookupPort workerLookupPort;
-    private final AttendanceService attendanceService;
-    private final DisciplinaryActionService disciplinaryActionService;
-    private final SalaryDeductionService salaryDeductionService;
+    private final AttendanceQueryPort attendanceQueryPort;
+    private final DisciplineQueryPort disciplineQueryPort;
+    private final PayrollQueryPort payrollQueryPort;
 
-    public DashboardRestController(WorkerLookupPort workerLookupPort, AttendanceService attendanceService,
-                                   DisciplinaryActionService disciplinaryActionService,
-                                   SalaryDeductionService salaryDeductionService) {
+    public DashboardRestController(WorkerLookupPort workerLookupPort, AttendanceQueryPort attendanceQueryPort,
+                                   DisciplineQueryPort disciplineQueryPort,
+                                   PayrollQueryPort payrollQueryPort) {
         this.workerLookupPort = workerLookupPort;
-        this.attendanceService = attendanceService;
-        this.disciplinaryActionService = disciplinaryActionService;
-        this.salaryDeductionService = salaryDeductionService;
+        this.attendanceQueryPort = attendanceQueryPort;
+        this.disciplineQueryPort = disciplineQueryPort;
+        this.payrollQueryPort = payrollQueryPort;
     }
 
     @GetMapping("/ceo-stats")
@@ -47,19 +47,19 @@ public class DashboardRestController {
         
         // Get today's attendance
         java.time.LocalDate today = java.time.LocalDate.now();
-        long totalAttendanceToday = attendanceService.getAllAttendance().stream()
+        long totalAttendanceToday = attendanceQueryPort.getAllAttendance().stream()
                 .filter(a -> a.getDate().equals(today))
                 .count();
-        long presentToday = attendanceService.getAllAttendance().stream()
+        long presentToday = attendanceQueryPort.getAllAttendance().stream()
                 .filter(a -> a.getDate().equals(today) && a.getStatus() == Attendance.AttendanceStatus.PRESENT)
                 .count();
-        long absentToday = attendanceService.getAllAttendance().stream()
+        long absentToday = attendanceQueryPort.getAllAttendance().stream()
                 .filter(a -> a.getDate().equals(today) && a.getStatus() == Attendance.AttendanceStatus.ABSENT)
                 .count();
         
-        long totalDeductions = salaryDeductionService.getAllDeductions().size();
-        long totalDisciplinaryActions = disciplinaryActionService.getAllActions().size();
-       long activeDisciplinaryActions = disciplinaryActionService.getAllActions().stream()
+        long totalDeductions = payrollQueryPort.getAllDeductions().size();
+        long totalDisciplinaryActions = disciplineQueryPort.getAllActions().size();
+       long activeDisciplinaryActions = disciplineQueryPort.getAllActions().stream()
         .filter(a ->
             a.getSeverity() == DisciplinaryAction.Severity.HIGH ||
             a.getSeverity() == DisciplinaryAction.Severity.CRITICAL
@@ -90,12 +90,12 @@ public class DashboardRestController {
         
         // Get today's attendance
         java.time.LocalDate today = java.time.LocalDate.now();
-        long attendanceToday = attendanceService.getAllAttendance().stream()
+        long attendanceToday = attendanceQueryPort.getAllAttendance().stream()
                 .filter(a -> a.getDate().equals(today))
                 .count();
         
-        long pendingDeductions = salaryDeductionService.getAllDeductions().size();
-        long openDisciplinaryActions = disciplinaryActionService.getAllActions().size();
+        long pendingDeductions = payrollQueryPort.getAllDeductions().size();
+        long openDisciplinaryActions = disciplineQueryPort.getAllActions().size();
         
         HRStats stats = new HRStats(
                 (int) totalWorkers,

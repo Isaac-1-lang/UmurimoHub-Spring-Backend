@@ -5,9 +5,11 @@ import ac.cursor.umurimohub.auth.port.UserProvisioningPort;
 import ac.cursor.umurimohub.auth.port.dto.CreateUserCommand;
 import ac.cursor.umurimohub.auth.port.dto.UserRef;
 import ac.cursor.umurimohub.auth.service.UserService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("service-auth | (!distributed & !service-worker)")
 public class UserProvisioningAdapter implements UserProvisioningPort {
 
     private final UserService userService;
