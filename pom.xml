@@ -29,6 +29,8 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <!-- Overridden by run-service.ps1 for distributed launchers -->
+        <umurimo.mainClass>ac.cursor.umurimohub.UmurimoHubApplication</umurimo.mainClass>
     </properties>
 
     <dependencyManagement>
@@ -175,6 +177,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${umurimo.mainClass}</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

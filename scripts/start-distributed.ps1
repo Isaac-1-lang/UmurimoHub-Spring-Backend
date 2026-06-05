@@ -1,45 +1,57 @@
 # Start UmurimoHub as distributed microservices with Eureka discovery.
-# Prerequisites: PostgreSQL with umurimo_auth, umurimo_worker, umurimo_attendance, umurimo_payroll, umurimo_discipline
-# Set DB_PASSWORD if needed: $env:DB_PASSWORD="yourpassword"
+# Prerequisites: PostgreSQL databases umurimo_auth, umurimo_worker, etc.
+#
+# Usage (from project root):
+#   .\scripts\start-distributed.ps1
+#
+# Or set DB password first:
+#   $env:DB_PASSWORD = "yourpassword"
+#   .\scripts\start-distributed.ps1
 
 $ErrorActionPreference = "Stop"
-$root = Split-Path $PSScriptRoot -Parent
-Set-Location $root
 
-if (-not $env:JAVA_HOME) {
-    $env:JAVA_HOME = "C:\Program Files\Java\jdk-24"
-}
+. (Join-Path $PSScriptRoot "env.ps1")
 
-$mvn = "mvn"
-$common = "-Dspring-boot.run.jvmArguments=-Deureka.client.registry-fetch-interval-seconds=5"
+$runScript = Join-Path $PSScriptRoot "run-service.ps1"
 
-function Start-ServiceWindow($title, $mainClass) {
-    $cmd = "cd `"$root`"; `$env:JAVA_HOME=`"$env:JAVA_HOME`"; if (`$env:DB_PASSWORD) {{}}; mvn -q spring-boot:run -Dspring-boot.run.mainClass=$mainClass $common"
-    if ($env:DB_PASSWORD) {
-        $cmd = "cd `"$root`"; `$env:JAVA_HOME=`"$env:JAVA_HOME`"; `$env:DB_PASSWORD=`"$env:DB_PASSWORD`"; mvn -q spring-boot:run -Dspring-boot.run.mainClass=$mainClass $common"
-    }
-    Start-Process powershell -ArgumentList "-NoExit", "-Command", $cmd -WindowStyle Normal
-    Write-Host "Started $title"
+function Start-UmurimoService {
+    param(
+        [string]$Title,
+        [string]$MainClass
+    )
+    $args = @(
+        "-NoExit",
+        "-ExecutionPolicy", "Bypass",
+        "-File", $runScript,
+        "-MainClass", $MainClass,
+        "-Title", $Title
+    )
+    Start-Process -FilePath "powershell.exe" -ArgumentList $args -WorkingDirectory $script:UmurimoHubRoot
+    Write-Host "Launched: $Title"
     Start-Sleep -Seconds 3
 }
 
-Write-Host "=== UmurimoHub Distributed Stack ==="
-Write-Host "Eureka UI:  http://localhost:8761"
-Write-Host "API Gateway: http://localhost:8080  (point frontend API here)"
+Write-Host "=== UmurimoHub Distributed Stack ===" -ForegroundColor Green
+Write-Host "Eureka UI:    http://localhost:8761"
+Write-Host "API Gateway:  http://localhost:8080"
+Write-Host "Project root: $script:UmurimoHubRoot"
 Write-Host ""
 
-Start-ServiceWindow "Eureka Server" "ac.cursor.umurimohub.launcher.EurekaServerApplication"
+Start-UmurimoService "Eureka Server :8761" "ac.cursor.umurimohub.launcher.EurekaServerApplication"
+Write-Host "Waiting 15s for Eureka..."
 Start-Sleep -Seconds 15
 
-Start-ServiceWindow "Auth Service :8101" "ac.cursor.umurimohub.launcher.AuthServiceApplication"
-Start-ServiceWindow "Worker Service :8102" "ac.cursor.umurimohub.launcher.WorkerServiceApplication"
-Start-ServiceWindow "Attendance :8103" "ac.cursor.umurimohub.launcher.AttendanceServiceApplication"
-Start-ServiceWindow "Payroll :8104" "ac.cursor.umurimohub.launcher.PayrollServiceApplication"
-Start-ServiceWindow "Discipline :8105" "ac.cursor.umurimohub.launcher.DisciplineServiceApplication"
-Start-ServiceWindow "Dashboard BFF :8081" "ac.cursor.umurimohub.launcher.DashboardServiceApplication"
+Start-UmurimoService "Auth Service :8101" "ac.cursor.umurimohub.launcher.AuthServiceApplication"
+Start-UmurimoService "Worker Service :8102" "ac.cursor.umurimohub.launcher.WorkerServiceApplication"
+Start-UmurimoService "Attendance :8103" "ac.cursor.umurimohub.launcher.AttendanceServiceApplication"
+Start-UmurimoService "Payroll :8104" "ac.cursor.umurimohub.launcher.PayrollServiceApplication"
+Start-UmurimoService "Discipline :8105" "ac.cursor.umurimohub.launcher.DisciplineServiceApplication"
+Start-UmurimoService "Dashboard BFF :8081" "ac.cursor.umurimohub.launcher.DashboardServiceApplication"
+
+Write-Host "Waiting 5s before gateway..."
 Start-Sleep -Seconds 5
-Start-ServiceWindow "API Gateway :8080" "ac.cursor.umurimohub.launcher.ApiGatewayApplication"
+Start-UmurimoService "API Gateway :8080" "ac.cursor.umurimohub.launcher.ApiGatewayApplication"
 
 Write-Host ""
-Write-Host "All processes launched in separate windows."
-Write-Host "Check Eureka at http://localhost:8761 for registered instances."
+Write-Host "All services launched in separate windows." -ForegroundColor Green
+Write-Host "Check http://localhost:8761 for registered instances."
